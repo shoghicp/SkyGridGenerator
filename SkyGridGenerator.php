@@ -7,7 +7,7 @@ description=Adds a new world generator
 version=0.1
 author=shoghicp
 class=none
-apiversion=7
+apiversion=7,8
 */
 
 class SkyGridGenerator implements LevelGenerator{
