@@ -4,10 +4,10 @@
 __PocketMine Plugin__
 name=SkyGridGenerator
 description=Adds a new world generator
-version=0.1
+version=0.2
 author=shoghicp
 class=none
-apiversion=7,8
+apiversion=9
 */
 
 class SkyGridGenerator implements LevelGenerator{
@@ -76,30 +76,32 @@ class SkyGridGenerator implements LevelGenerator{
 		}
 	}
 		
-	public function generateChunk($chunkX, $chunkY, $chunkZ){
-		$this->random->setSeed((int) (($chunkX * 0xdead + $chunkZ * 0xbeef + $chunkY * 0x1337) * $this->floatSeed));
-		$chunk = "";
-		$startY = $chunkY << 4;
-		$endY = $startY + 16;
-		for($z = 0; $z < 16; ++$z){
-			for($x = 0; $x < 16; ++$x){
-				$blocks = "";
-				$metas = "";
-				for($y = $startY; $y < $endY; ++$y){
-					if(($y % $this->gridlenght) === 0 and ($z % $this->gridlenght) === 0 and ($x % $this->gridlenght) === 0){
-						$blocks .= chr($this->pickBlock($this->total));
-					}else{
-						$blocks .= "\x00";
+	public function generateChunk($chunkX, $chunkZ){
+		$this->random->setSeed((int) (($chunkX * 0xdead + $chunkZ * 0xbeef) * $this->floatSeed));
+		for($Y = 0; $Y < 8; ++$Y){
+			$chunk = "";
+			$startY = $Y << 4;
+			$endY = $startY + 16;
+			for($z = 0; $z < 16; ++$z){
+				for($x = 0; $x < 16; ++$x){
+					$blocks = "";
+					$metas = "";
+					for($y = $startY; $y < $endY; ++$y){
+						if(($y % $this->gridlenght) === 0 and ($z % $this->gridlenght) === 0 and ($x % $this->gridlenght) === 0){
+							$blocks .= chr($this->pickBlock($this->total));
+						}else{
+							$blocks .= "\x00";
+						}
+						$metas .= "0";
 					}
-					$metas .= "0";
+					$chunk .= $blocks.Utils::hexToStr($metas)."\x00\x00\x00\x00\x00\x00\x00\x00";
 				}
-				$chunk .= $blocks.Utils::hexToStr($metas)."\x00\x00\x00\x00\x00\x00\x00\x00";
 			}
+			$this->level->setMiniChunk($chunkX, $chunkZ, $Y, $chunk);
 		}
-		$this->level->setMiniChunk($chunkX, $chunkZ, $chunkY, $chunk);
 	}
 	
-	public function populateChunk($chunkX, $chunkY, $chunkZ){
+	public function populateChunk($chunkX, $chunkZ){
 
 	}
 	
