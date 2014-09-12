@@ -28,7 +28,7 @@ class SkyGridGenerator extends Generator{
 		return "skygrid";
 	}
 	
-	public function __construct(array $options = array()){
+	public function __construct(array $options = []){
 		$this->gridlength = 4;
 		$this->options = $options;
 		$this->normalp = [
@@ -75,10 +75,10 @@ class SkyGridGenerator extends Generator{
 		$this->random = $random;
 		$this->floatSeed = $this->random->nextFloat();
 		$this->total = 0;
-		$this->cump = array();
+		$this->cump = [];
 		
 		foreach($this->normalp as $key => $value){
-			$this->cump[$key] = array($this->total, $this->total + $value);
+			$this->cump[$key] = [$this->total, $this->total + $value];
 			$this->total += $value;
 		}
 	}
