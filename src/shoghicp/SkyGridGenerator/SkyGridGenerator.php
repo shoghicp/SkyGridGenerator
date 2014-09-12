@@ -35,7 +35,7 @@ class SkyGridGenerator extends Generator{
 			Block::STONE => 120,
 			Block::GRASS => 80,
 			Block::DIRT => 20,
-			Block::STILL_WATER => 9,
+			Block::STILL_WATER => 10,
 			Block::STILL_LAVA => 5,
 			Block::SAND => 20,
 			Block::GRAVEL => 10,
@@ -56,17 +56,21 @@ class SkyGridGenerator extends Generator{
 			Block::BROWN_MUSHROOM => 2,
 			Block::RED_MUSHROOM => 2,
 			Block::TNT => 2,
-			Block::BOOKSHELF => 2,
+			Block::BOOKSHELF => 3,
 			Block::MOSSY_STONE => 5,
 			Block::OBSIDIAN => 5,
 			Block::CHEST => 1,
+			Block::MONSTER_SPAWNER => 1,
 			Block::DIAMOND_ORE => 1,
 			Block::REDSTONE_ORE => 8,
 			Block::ICE => 4,
+			Block::SNOW_BLOCK => 8,
 			Block::CACTUS => 1,
 			Block::CLAY_BLOCK => 20,
 			Block::SUGARCANE_BLOCK => 15,
-			Block::MELON_BLOCK => 5
+			Block::PUMPKIN => 5,
+			Block::MELON_BLOCK => 5,
+			Block::MYCELIUM => 15
 		];
 	}
 	
@@ -88,17 +92,10 @@ class SkyGridGenerator extends Generator{
 		
 		$chunk = $this->level->getChunk($chunkX, $chunkZ);
 		
-		for($Y = 0; $Y < 8; ++$Y){
-			$startY = $Y << 4;
-			$endY = $startY + 16;
-			for($z = 0; $z < 16; ++$z){
-				for($x = 0; $x < 16; ++$x){
-					for($y = $startY; $y < $endY; ++$y){
-						if(($y % $this->gridlength) === 0 and ($z % $this->gridlength) === 0 and ($x % $this->gridlength) === 0){
-							$chunk->setBlockId($x, $y, $z, $this->pickBlock($this->total));
-						}
-
-					}
+		for($y = 0; $y < 128; $y += $this->gridlength){
+			for($z = 0; $z < 16; $z += $this->gridlength){
+				for($x = 0; $x < 16; $x += $this->gridlength){
+					$chunk->setBlockId($x, $y, $z, $this->pickBlock($this->total));
 				}
 			}
 		}
