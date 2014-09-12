@@ -95,7 +95,23 @@ class SkyGridGenerator extends Generator{
 		for($y = 0; $y < 128; $y += $this->gridlength){
 			for($z = 0; $z < 16; $z += $this->gridlength){
 				for($x = 0; $x < 16; $x += $this->gridlength){
-					$chunk->setBlockId($x, $y, $z, $this->pickBlock($this->total));
+					$blockId = $this->pickBlock($this->total);
+										
+					if($blockId === Block::WOOL){
+						$chunk->setBlockId($x, $y, $z, $blockId);
+						$chunk->setBlockData($x, $y, $z, $this->random->nextInt() & 0xf);
+					}elseif($blockId === 6 or $blockId === 31 or $blockId === 32 or $blockId === 37 or $blockId === 38 or $blockId === 39 or $blockId === 40 or $blockId === 83){
+						$chunk->setBlockId($x, $y, $z, 3);
+						$chunk->setBlockId($x, $y + 1, $z, $blockId);
+						if($blockId === 83){
+							$chunk->setBlockId($x + 1, $y, $z, 9);
+						}
+					}elseif($blockId === 83){
+						$chunk->setBlockId($x, $y, $z, 12);
+						$chunk->setBlockId($x, $y + 1, $z, $blockId);
+					}else{
+						$chunk->setBlockId($x, $y, $z, $blockId);
+					}
 				}
 			}
 		}
@@ -106,6 +122,6 @@ class SkyGridGenerator extends Generator{
 	}
 	
 	public function getSpawn(){
-		return new Vector3(128, 128, 128);
+		return new Vector3(128.5, 64, 128.5);
 	}
 }
